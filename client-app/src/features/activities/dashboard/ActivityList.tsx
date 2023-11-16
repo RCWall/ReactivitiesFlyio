@@ -5,10 +5,11 @@ import { Segment, Item, Button, Label } from 'semantic-ui-react';
 // 2. Create the Props interface
 interface Props {
     activities: Activity[];
+    selectActivity: (id: string) => void;
 }
 
 // 3. Create the ActivityList component
-export default function ActivityList({activities}: Props) {
+export default function ActivityList({activities, selectActivity}: Props) {
     return (
         <Segment>
             <Item.Group divided>
@@ -22,7 +23,7 @@ export default function ActivityList({activities}: Props) {
                                <div>{activity.city}, {activity.venue}</div>
                            </Item.Description>
                             <Item.Extra>
-                                <Button floated='right' content='View' color='blue' />
+                                <Button onClick={() => selectActivity(activity.id)} floated='right' content='View' color='blue' />
                                 <Label basic content={activity.category} />
                             </Item.Extra>
                         </Item.Content>
