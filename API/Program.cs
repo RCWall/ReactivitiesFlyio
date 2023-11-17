@@ -13,7 +13,6 @@ builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -28,7 +27,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-//creating database
+
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 

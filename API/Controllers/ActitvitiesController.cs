@@ -12,10 +12,16 @@ namespace API.Controllers
 {
     public class ActivitiesController : BaseApiController
     {
-    
+        // Attribute indicating that this method responds to HTTP GET requests.
         [HttpGet] //api/activities
+
+        // Asynchronous method 'GetActivities' to handle GET requests and return a list of 'Activity' objects.
         public async Task<ActionResult<List<Activity>>> GetActivities()
         {
+            // 'Mediator.Send' sends a new 'List.Query()' request to the MediatR mediator.
+            // MediatR then finds the appropriate handler for this request type and executes it.
+            // The 'List.Query()' is a request to get a list of activities, which MediatR routes to its corresponding handler.
+            // The method awaits the response from the handler, which is a list of 'Activity' objects, and returns this list.
             return await Mediator.Send(new List.Query());
         }
         
