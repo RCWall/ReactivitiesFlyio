@@ -15,19 +15,23 @@ interface Props {
     openForm: (id: string) => void;             // Function to open the form
     closeForm: () => void;
     createOrEdit: (activity: Activity) => void; 
-    deleteActivity: (id: string) => void;                    
+    deleteActivity: (id: string) => void;
+    submitting: boolean;                    
 }
 
 // Purpose of this component is to display the ActivityList, ActivityDetails, and ActivityForm components
 export default function ActivityDashboard({activities, selectedActivity, 
-    selectActivity, cancelSelectActivity, editMode, openForm, closeForm, createOrEdit, deleteActivity}: Props) {
+    selectActivity, cancelSelectActivity, 
+    editMode, openForm, closeForm, createOrEdit, 
+    deleteActivity, submitting}: Props) {
     return (
         <Grid>
            < Grid.Column width='10'>
                 {/*ActivityList component, passing activities and selectActivity as props*/}
                 <ActivityList activities={activities} 
                     selectActivity={selectActivity} 
-                    deleteActivity={deleteActivity} />
+                    deleteActivity={deleteActivity}
+                    submitting={submitting} />
            </Grid.Column>
            <Grid.Column width='6'>
             {/*only loads ActivityDetails component if there is an activity and not in edit mode*/}
@@ -38,7 +42,11 @@ export default function ActivityDashboard({activities, selectedActivity,
              />}
              {/*ActivityForm component only renders if editmode set to true*/}
              {editMode &&
-             <ActivityForm closeForm={closeForm} activity={selectedActivity} createOrEdit={createOrEdit}/>}
+             <ActivityForm 
+                closeForm={closeForm} 
+                activity={selectedActivity} 
+                createOrEdit={createOrEdit} 
+                submitting={submitting}/>}
            </Grid.Column>
         </Grid>
     )
