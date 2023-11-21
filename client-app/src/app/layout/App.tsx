@@ -7,10 +7,14 @@ import ActivityDashboard from '../../features/activities/dashboard/ActivityDashb
 import {v4 as uuid} from 'uuid';
 import agent from '../api/agent';
 import LoadingComponent from './LoadingComponent';
+import { useStore } from '../stores/store';
+import { observer } from 'mobx-react-lite';
 
 
 function App() {
   
+  const {activityStore} = useStore();
+
   //state variable used to store the activities that are returned from the API
   //passed to the ActivityDashboard component  as props along with the other functions and state variables
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -21,48 +25,16 @@ function App() {
   //this will be used to determine if the user is in edit mode or not
   const [editMode, setEditMode] = useState(false);
 
-  const [loading, setLoading] = useState(true);
 
   const [submitting, setSubmitting] = useState(false);
 
   
   //gets the activities from the API and reformat the date
   useEffect(() => {
-    agent.Activities.list()
-    .then(response => {
-      let activities: Activity[] = [];
-      response.forEach(activity => {
-        activity.date = activity.date.split('T')[0];
-        activities.push(activity);
-      })
-      setActivities(activities)
-      setLoading(false);
-    })
-  }, [])
+       activityStore.loadActivities();
+  }, [activityStore])
   
   
-
-  //the function will take in the id of the activity that was clicked on and will use it to find the activity in the activities array
-  function handleSelectActivity(id: string) {
-    setSelectedActivity(activities.find(x => x.id === id))
-  }
-
-  //this function will be used to set the selectedActivity to undefined
-  function handleCancelSelectActivity() {
-    setSelectedActivity(undefined);
-  }
-
-  //
-  function handleFormOpen(id?: string) {
-    //if the id is undefined, then the user is creating a new activity else the user is editing an existing activity
-    id ? handleSelectActivity(id) : handleCancelSelectActivity();
-    setEditMode(true);
-  }
-
-  // this function will be used to close the form
-  function handleFormClose() {
-    setEditMode(false);
-  }
 
   function handleCreateOrEditActivity(activity: Activity) {
 
@@ -94,20 +66,14 @@ function App() {
   }
 
   //renders navbar and activity dashboard components
-  if (loading) return <LoadingComponent content='Loading app' />
+  if (activityStore.loadingInitial) return <LoadingComponent content='Loading app' />
 
   return (
   <>  
-   <NavBar openForm={handleFormOpen}/>
+   <NavBar />
    <Container style = {{ marginTop: '7em' }}>
      <ActivityDashboard
-      activities={activities} 
-      selectedActivity={selectedActivity}
-      selectActivity={handleSelectActivity}
-      cancelSelectActivity={handleCancelSelectActivity}
-      editMode={editMode}
-      openForm={handleFormOpen}
-      closeForm={handleFormClose}
+      activities={activityStore.activities} 
       createOrEdit={handleCreateOrEditActivity}
       deleteActivity={handleDeleteActivity}
       submitting={submitting}
@@ -117,4 +83,4 @@ function App() {
   )
 }
 
-export default App
+export default observer(App)

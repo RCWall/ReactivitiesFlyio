@@ -2,17 +2,17 @@
 import { SyntheticEvent, useState } from 'react';
 import { Activity } from '../../../app/models/activity';    // 1. Import the Activity interface
 import { Segment, Item, Button, Label } from 'semantic-ui-react';
+import { useStore } from '../../../app/stores/store';
 
 // 2. Create the Props interface
 interface Props {
     activities: Activity[];
-    selectActivity: (id: string) => void;
     deleteActivity: (id: string) => void;
     submitting: boolean;
 }
 
 // 3. Create the ActivityList component
-export default function ActivityList({activities, selectActivity, deleteActivity, submitting}: Props) {
+export default function ActivityList({activities, deleteActivity, submitting}: Props) {
     
     const [target, setTarget] = useState(''); // 4. Create a state for the target button
 
@@ -20,6 +20,9 @@ export default function ActivityList({activities, selectActivity, deleteActivity
         setTarget(e.currentTarget.name); // 5. Set the target button
         deleteActivity(id);
     }
+
+    const {activityStore} = useStore();
+
     return (
         <Segment>
             <Item.Group divided>
@@ -34,7 +37,7 @@ export default function ActivityList({activities, selectActivity, deleteActivity
                                <div>{activity.city}, {activity.venue}</div>
                            </Item.Description>
                             <Item.Extra>
-                                <Button onClick={() => selectActivity(activity.id)} floated='right' content='View' color='blue' />
+                                <Button onClick={() => activityStore.selectActivity(activity.id)} floated='right' content='View' color='blue' />
                                 <Button
                                     name={activity.id}
                                     loading={submitting && target === activity.id} 
