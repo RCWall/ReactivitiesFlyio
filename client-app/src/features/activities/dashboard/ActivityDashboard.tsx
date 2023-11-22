@@ -1,10 +1,10 @@
 
 import { Grid } from 'semantic-ui-react';
 import ActivityList from './ActivityList';
-import ActivityDetails from '../details/ActivityDetails';
-import ActivityForm from '../form/ActivityForm';
 import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 
 
@@ -12,7 +12,16 @@ import { observer } from 'mobx-react-lite';
 export default observer  (function ActivityDashboard() {
 
     const {activityStore} = useStore();
-    const {selectedActivity, editMode} = activityStore;
+
+    //gets the activities from the API and reformat the date
+    useEffect(() => {
+         activityStore.loadActivities();
+    }, [activityStore])
+    
+  
+  
+    //renders navbar and activity dashboard components
+    if (activityStore.loadingInitial) return <LoadingComponent content='Loading app' />
 
     return (
         <Grid>
@@ -21,12 +30,7 @@ export default observer  (function ActivityDashboard() {
                 <ActivityList />
            </Grid.Column>
            <Grid.Column width='6'>
-            {/*only loads ActivityDetails component if there is an activity and not in edit mode*/}
-            {selectedActivity && !editMode &&
-             <ActivityDetails/>}
-             {/*ActivityForm component only renders if editmode set to true*/}
-             {editMode &&
-             <ActivityForm />}
+            <h2>Activity Filters</h2>
            </Grid.Column>
         </Grid>
     )
