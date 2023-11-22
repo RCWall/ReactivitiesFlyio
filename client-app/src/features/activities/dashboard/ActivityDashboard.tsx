@@ -12,11 +12,12 @@ import LoadingComponent from '../../../app/layout/LoadingComponent';
 export default observer  (function ActivityDashboard() {
 
     const {activityStore} = useStore();
+    const {loadActivities, activityRegistry} = activityStore;   
 
     //gets the activities from the API and reformat the date
     useEffect(() => {
-         activityStore.loadActivities();
-    }, [activityStore])
+         if (activityRegistry.size <= 1 ) loadActivities();
+    }, [loadActivities, activityRegistry.size]) //dependency array, if the array is empty, the useEffect will only run once, if the array is not empty, the useEffect will run every time the dependency changes (in this case, the dependency is the loadActivities function)]])
     
   
   
