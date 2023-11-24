@@ -1,4 +1,5 @@
 
+using Application.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,16 @@ namespace API.Controllers
         // It works like a middleman, managing and directing requests to the appropriate parts of the application.
         protected IMediator Mediator => _mediator ??= 
             HttpContext.RequestServices.GetService<IMediator>();
+
+        
+        protected ActionResult HandleResult<T>(Result<T> result)
+        {
+            if (result.IsSuccess && result.Value != null)
+              return Ok(result.Value);           
+            if (result.IsSuccess && result.Value == null)
+                return NotFound();
+            return BadRequest(result.Error);
+        }
 
     }
 }

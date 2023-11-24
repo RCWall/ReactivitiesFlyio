@@ -1,12 +1,9 @@
 
-
-
 using Application.Activities;
 using Domain;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
+
+
 
 namespace API.Controllers
 {
@@ -16,26 +13,28 @@ namespace API.Controllers
         [HttpGet] //api/activities
 
         // Asynchronous method 'GetActivities' to handle GET requests and return a list of 'Activity' objects.
-        public async Task<ActionResult<List<Activity>>> GetActivities()
+        public async Task<IActionResult> GetActivities()
         {
             // 'Mediator.Send' sends a new 'List.Query()' request to the MediatR mediator.
             // MediatR then finds the appropriate handler for this request type and executes it.
             // The 'List.Query()' is a request to get a list of activities, which MediatR routes to its corresponding handler.
             // The method awaits the response from the handler, which is a list of 'Activity' objects, and returns this list.
-            return await Mediator.Send(new List.Query());
+            return HandleResult(await Mediator.Send(new List.Query()));
         }
         
         [HttpGet("{id}")] //api/activities/fdfd
-        public async Task<ActionResult<Activity>> GetActivity(Guid id)
+        public async Task<IActionResult> GetActivity(Guid id)
         {
-            return await Mediator.Send(new Details.Query{Id = id});
+        
+            return HandleResult(await Mediator.Send(new Details.Query{Id = id}));
+           
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateActivity(Activity activity)
         {
-            await Mediator.Send(new Create.Command { Activity = activity });
-            return Ok();
+            return HandleResult( await Mediator.Send(new Create.Command { Activity = activity }));
+           
         }
 
         [HttpPut("{id}")]
