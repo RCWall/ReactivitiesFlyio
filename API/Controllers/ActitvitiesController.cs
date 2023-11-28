@@ -25,6 +25,13 @@ namespace API.Controllers
         [HttpGet("{id}")] //api/activities/fdfd
         public async Task<IActionResult> GetActivity(Guid id)
         {
+            // This method is asynchronous and returns an 'IActionResult', which represents the result of an HTTP request.
+
+            // 'Mediator.Send' sends a new 'Details.Query' with the provided 'id' to be handled by the appropriate handler.
+            // 'new Details.Query{Id = id}' creates a new instance of the 'Details.Query' class and sets its 'Id' property.
+            // The result of the 'Mediator.Send' operation is a 'Result<T>' object, representing the outcome of the query.
+            // 'HandleResult' processes the 'Result<T>' object received from the 'Mediator.Send' operation.
+            // The final line returns the HTTP response determined by the 'HandleResult' method.
         
             return HandleResult(await Mediator.Send(new Details.Query{Id = id}));
            

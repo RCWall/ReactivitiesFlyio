@@ -11,26 +11,30 @@ const sleep = (delay: number) => {
     })
 }
 
+// Sets the base URL for all Axios requests to the local server's API endpoint.
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
+// Interceptor for handling responses from Axios requests.
 axios.interceptors.response.use(async response => {
+    // Function to handle successful responses.
         await sleep(1000);
         return response;
 }, (error: AxiosError) => {
+    // Function to handle errors (failed responses).
     const {data, status, config} = error.response as AxiosResponse;
     switch(status){
-        case 400:
+        case 400: // Bad Request
             if (config.method === 'get' && data.errors.hasOwnProperty('id')){
                 router.navigate('/not-found');
             }
             if (data.errors){
-                  const modelSatateErrors = [];
+                  const modelStateErrors = [];
                     for(const key in data.errors){
                         if(data.errors[key]){
-                            modelSatateErrors.push(data.errors[key])
+                            modelStateErrors.push(data.errors[key])
                         }
                     }
-                    throw modelSatateErrors.flat();
+                    throw modelStateErrors.flat();
             } else {
                 toast.error(data);
             };
