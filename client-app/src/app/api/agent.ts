@@ -11,15 +11,17 @@ const sleep = (delay: number) => {
     })
 }
 
-// Sets the base URL for all Axios requests to the local server's API endpoint.
-axios.defaults.baseURL = 'http://evp-99-88-00.azurewebsites.net/api';
+// Sets the base URL for all Axios requests to correct API endpoint.
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 // Interceptor for handling responses from Axios requests.
 axios.interceptors.response.use(async response => {
     // Function to handle successful responses.
+    if(import.meta.env.MODE)
         await sleep(1000);
         return response;
-}, (error: AxiosError) => {
+    }
+, (error: AxiosError) => {
     // Function to handle errors (failed responses).
     const {data, status, config} = error.response as AxiosResponse;
     switch(status){

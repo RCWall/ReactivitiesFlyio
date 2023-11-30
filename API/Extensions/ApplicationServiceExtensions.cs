@@ -38,7 +38,7 @@ namespace API.Extensions
                     services.AddCors(opt => {
                     opt.AddPolicy("CorsPolicy", policy =>
                     {
-                        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://evp-99-88-00.azurewebsites.net");
+                        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
                     });
                     });
 
