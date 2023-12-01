@@ -60,3 +60,4 @@ catch (Exception ex)
 
 
 app.Run();
+Console.WriteLine("server running!");
