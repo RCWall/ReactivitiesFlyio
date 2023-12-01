@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices(builder.Configuration);
 
-
+var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
 var app = builder.Build();
 
 //Configure the HTTP request pipeline.
