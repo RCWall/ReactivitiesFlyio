@@ -11,8 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices(builder.Configuration);
 
-var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
-Console.WriteLine($"Connection String: {connectionString}");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+Console.WriteLine($"Connection string: {connectionString}");
+
+
 
 var app = builder.Build();
 
