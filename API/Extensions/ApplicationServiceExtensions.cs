@@ -32,7 +32,7 @@ namespace API.Extensions
                     // Retrieves the SQLite database connection string from application configuration under 'DefaultConnection'.
                     services.AddDbContext<DataContext>(opt =>
                     {
-                    opt.UseSqlite(config.GetConnectionString("DefaultConnection"));  
+                    opt.UseNpgsql(config.GetConnectionString("DefaultConnection"));  
                     });
 
                     services.AddCors(opt => {
