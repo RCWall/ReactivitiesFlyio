@@ -17,7 +17,6 @@ axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 // Interceptor for handling responses from Axios requests.
 axios.interceptors.response.use(async response => {
     // Function to handle successful responses.
-    if(import.meta.env.MODE)
         await sleep(1000);
         return response;
     }

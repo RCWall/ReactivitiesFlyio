@@ -11,8 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices(builder.Configuration);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-Console.WriteLine($"Connection string: {connectionString}");
 
 
 
@@ -60,3 +58,4 @@ catch (Exception ex)
 
 
 app.Run();
+Console.WriteLine("server running!");
