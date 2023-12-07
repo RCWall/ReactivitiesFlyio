@@ -23,7 +23,7 @@ export default observer  (function ActivityDashboard() {
   
   
     //renders navbar and activity dashboard components
-    if (activityStore.loadingInitial) return <LoadingComponent content='Loading app' />
+    if (activityStore.loadingInitial) return <LoadingComponent content='Loading activities' />
 
     return (
         <Grid>
