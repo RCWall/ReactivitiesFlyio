@@ -1,4 +1,5 @@
 using Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
@@ -6,7 +7,7 @@ namespace Persistence
     // 'DataContext' class extends DbContext, configuring the Entity Framework data model.
     // Includes 'Activities' DbSet for CRUD operations on 'Activity' entities.
     // DbContextOptions in the constructor enable configuration via dependency injection.
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<AppUser>
     {
         // Initializes the DataContext with configuration options provided to the base DbContext class.
         public DataContext(DbContextOptions options) : base(options)
