@@ -2,8 +2,10 @@
 
 using Application.Activities;
 using Application.Core;
+using Application.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -50,10 +52,12 @@ namespace API.Extensions
                     // In this case, it's the assembly where 'List.Handler' is located, ensuring that all MediatR handlers in this assembly are discovered and registered.
                     // This enables the application to use MediatR for handling requests and notifications following the defined handlers in the specified assembly.
                     services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
-                    
+    
                     services.AddAutoMapper(typeof(MappingProfiles).Assembly);
                     services.AddFluentValidationAutoValidation();
                     services.AddValidatorsFromAssemblyContaining<Create>();
+                    services.AddHttpContextAccessor();
+                    services.AddScoped<IUserAccessor, UserAccessor>();
 
                     return services;
            }

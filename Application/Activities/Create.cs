@@ -1,7 +1,10 @@
 //purpose: create a new activity
 using Application.Core;
+using Application.Interfaces;
+using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 
@@ -33,16 +36,29 @@ namespace Application.Activities
         {
             // This is a tool to interact with the database.
             private readonly DataContext _context;
+            private readonly IUserAccessor _userAccessor;
             
             // Constructor: This is like setting up the Handler, telling it about the database tool 'DataContext'.
-            public Handler(DataContext context)
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _context = context;
             }
 
             // This method is where the action happens when a 'Command' is received.
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
-            {
+            {   
+                var user = await _context.Users.FirstOrDefaultAsync(x => 
+                    x.UserName == _userAccessor.GetUsername());
+
+                var attendee = new ActivityAttendee
+                {
+                    AppUser = user,
+                    Activity = request.Activity,
+                    IsHost = true
+                };
+
+                request.Activity.Attendees.Add(attendee);
                 // Add the new activity to the database.
                 _context.Activities.Add(request.Activity);
 
